@@ -1,13 +1,10 @@
 package com.vij.vendingmachine.interfaces;
 
-public interface IVendingMachine {
+import com.vijendert.vendingmachine.exceptions.MoneyLessException;
+
+public interface IVendingMachine extends ISupplier {
 	public void selectItem(String rowCol);
 
-	public void inputMoney(int money);
+	public void inputMoney(int money) throws MoneyLessException;
 
-	abstract IProduct dispenseItem();
-
-	abstract int dispenseChange();
-
-	abstract String releaseBOM();
 }
