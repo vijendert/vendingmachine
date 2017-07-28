@@ -29,33 +29,8 @@ public class VendingMachine extends AbstractVendingMachine {
 			vmItemManager.addItemInAllSlots(product);
 
 			vm.selectItem("11");
-			vm.inputMoney(9);
+			vm.inputMoney(10);
 
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
-			vm.inputMoney(100);
-
-			vm.selectItem("11");
 			vm.inputMoney(100);
 
 		} catch (Exception e) {
@@ -77,9 +52,17 @@ public class VendingMachine extends AbstractVendingMachine {
 	}
 
 	public void inputMoney(int money) throws MoneyLessException {
+
+		if (selectedItem == null) {
+			System.out.println("ERROR: No item selected,you are out of transaction");
+			return;
+		}
+		if (money < selectedItem.getPrice()) {
+			throw new MoneyLessException("Money add is " + money + "where required is " + selectedItem.getPrice());
+		}
 		int change = 0;
 		System.out.println("You entered amount " + money);
-		if (money > selectedItem.getPrice()) {
+		if (money >= selectedItem.getPrice()) {
 			try {
 				change = vmMoneyManager.calculateChange(selectedItem.getPrice(), money);
 			} catch (Exception e) {
@@ -89,11 +72,13 @@ public class VendingMachine extends AbstractVendingMachine {
 			dispenseItem(selectedRowCol);
 			dispenseChange(change);
 			System.out.println(releaseBOM());
-		}
-		if (money < selectedItem.getPrice()) {
-			throw new MoneyLessException("Money add is " + money + "where required is " + selectedItem.getPrice());
+			resetForNextTransaction();
 		}
 
+	}
+
+	private void resetForNextTransaction() {
+		selectedItem = null;
 	}
 
 	@Override
